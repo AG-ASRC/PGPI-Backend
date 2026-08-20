@@ -9,25 +9,9 @@ from app.lib.env import initEnv, getEnvByKey
 initEnv(path=".", file=".env")
 
 from app.lib.sql import Base
-from app.customs.test.models.test import Test
+from app.lib.autoloader import modelsAutoloader
 
-from pathlib import Path
-from importlib import import_module
-
-customs_path = Path(__file__).resolve().parent.parent / "customs"
-
-for resource in customs_path.iterdir():
-
-    if not resource.is_dir():
-        continue
-
-    models_file = resource / "models.py"
-    if not models_file.is_file():
-        continue
-
-    import_module(
-        f"app.customs.{resource.name}.models"
-    )
+modelsAutoloader()
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
