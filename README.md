@@ -1,36 +1,70 @@
 # PGPI-Backend
 Backend de la solution PGPI (Plateforme de Gestion et de Pilotage d'Infrastructure)
 
+## Vue d'ensemble
+
+Ce projet expose une API FastAPI qui automatise le chargement des modules via
+l'autoloader present dans [app/lib/autoloader.py](app/lib/autoloader.py). Les
+modules metiers sont organises dans [app/modules](app/modules), avec des sous-
+structures de schemas, repositories, routes et modeles.
+
+## Fonctionnalites actuelles
+
+### Module organizations
+
+Le module [app/modules/organizations](app/modules/organizations) contient la
+gestion des organisations avec les operations suivantes :
+
+- Recuperation de toutes les organisations
+- Recuperation d'une organisation par id ou UUID
+- Creation d'une organisation
+- Mise a jour d'une organisation
+
+Les routes exposees sont detaillees dans [docs/API.md](docs/API.md).
+
 ## Architecture
 
-La structure du projet, le flux d'une requete et la relation entre FastAPI,
-Pydantic, SQLAlchemy et Alembic sont decrits dans la
-[documentation d'architecture](docs/architecture.md).
+Le projet s'appuie sur :
 
-## Documentation
+- FastAPI pour l'API HTTP et les routes
+- Pydantic pour la validation des donnees
+- SQLAlchemy pour la couche ORM et la base de donnees
+- Alembic pour les migrations de schema
 
-La documentation du projet est disponible dans le dossier `docs/` :
+La documentation technique est disponible dans le dossier [docs](docs) :
 
-- [Architecture et persistance](docs/architecture.md) : relation entre
-	Pydantic, SQLAlchemy et Alembic, organisation des ressources et procedure de
-	migration.
-- [Exemple de ressource custom](docs/customs-ressources-example/) : structure
-  d'une ressource avec schemas Pydantic, modeles SQLAlchemy et routes FastAPI.
-- [Environnement de developpement](docs/environnement.md) : creation du venv,
-	activation et installation des dependances.
-- [Lancer l'API avec Uvicorn](docs/uvicorn.md) : demarrage du serveur et acces
-	a la documentation interactive.
-- [Gerer les migrations avec Alembic](docs/alembic.md) : creation, application,
-	consultation et annulation des migrations.
-- [Creer un module custom](docs/creation-module-custom.md) : structure des
-  dossiers, schemas Pydantic, modeles SQLAlchemy et routes FastAPI.
-
-Pour ajouter une nouvelle ressource, creer un dossier dans `app/customs/` et
-suivre la structure de l'exemple ainsi que les etapes decrites dans la
-documentation d'architecture.
+- [docs/API.md](docs/API.md)
+- [docs/architecture.md](docs/architecture.md)
+- [docs/environnement.md](docs/environnement.md)
+- [docs/uvicorn.md](docs/uvicorn.md)
+- [docs/alembic.md](docs/alembic.md)
+- [docs/creation-module-custom.md](docs/creation-module-custom.md)
 
 ## Demarrage rapide
 
-1. Suivre le guide [Environnement de developpement](docs/environnement.md).
-2. Lancer l'API avec le guide [Uvicorn](docs/uvicorn.md).
-3. Initialiser la base avec le guide [Alembic](docs/alembic.md).
+1. Creer et activer un environnement virtuel selon le guide
+   [docs/environnement.md](docs/environnement.md).
+2. Installer les dependances :
+
+```bash
+pip install -r requirements.txt
+```
+
+3. Lancer le serveur :
+
+```bash
+uvicorn main:app --reload
+```
+
+4. Appliquer les migrations Alembic si besoin :
+
+```bash
+alembic upgrade head
+```
+
+## Notes de developpement
+
+- Les modules sont charges automatiquement par [app/lib/autoloader.py](app/lib/autoloader.py).
+- Les sessions SQLAlchemy sont centralisees dans [app/lib/sql.py](app/lib/sql.py).
+- Les variables d'environnement sont chargees depuis le fichier `.env` dans
+  [app/lib/env.py](app/lib/env.py).
